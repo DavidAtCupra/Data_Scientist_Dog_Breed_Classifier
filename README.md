@@ -62,7 +62,7 @@ Top 3 Predicted Breeds:
 1. Clone the repository:
    ```bash
    git clone https://github.com/DavidAtCupra/Data_Scientist_Dog_Breed_Classifier.git
-   cd dog-breed-classifier
+   cd Data_Scientist_Dog_Breed_Classifier
    ```
 
 2. Run Jupyter Notebook:
@@ -77,7 +77,7 @@ Top 3 Predicted Breeds:
 This project was developed as part of the **Udacity Data Scientist Nanodegree** program.  
 Special thanks to:
 - **Udacity** for the dataset and starter code.
-- **Kaggle and ImageNet** for the dog images and pre-trained ResNet50 model.
+- **Standford University and ImageNet** for the dog images and pre-trained ResNet50 model.
 - **OpenCV** for Haar cascade face detection.
 - **TensorFlow / Keras** for model training support.
 
