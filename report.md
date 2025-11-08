@@ -1,4 +1,4 @@
-# Dog Breed Classifier
+# Dog Breed Classifier Technical Blog Entry
 
 ## 1. Project Overview
 The goal of this project is to build a convolutional neural network (CNN) that can identify dog breeds from images.  
@@ -13,6 +13,26 @@ This project demonstrates the use of **transfer learning** and **pre-trained dee
 ---
 
 ## 2. Data and Preprocessing
+
+### Exploratory Data Analysis
+
+Below we visualize key aspects of the dataset to better understand its structure:
+
+#### Class Distribution
+![class_distribution](images/class_distribution.png)
+
+#### Image Dimension Distribution
+![image_sizes](images/image_sizes.png)
+
+These plots reveal that the dataset contains roughly balanced classes and 
+moderate variation in image dimensions, which helps standardize preprocessing.
+
+### Image example
+
+![image_sizes](images/image_example.png)
+
+Example images from the training dataset showing a variety of dog breeds. This visualization provides a quick qualitative overview of the dataset, illustrating differences in appearance, color, and texture across breeds. It also helps confirm that the images are correctly labeled and diverse, which is important for effective model generalization.
+
 ### Datasets
 - **Dog dataset**: 8,351 total images, organized by 133 dog breeds.
   - Training set: 6,675 images  
@@ -80,6 +100,49 @@ Bottleneck features were extracted from **ResNet50** and passed through a small 
 ResNet50 was chosen for its deep residual connections that effectively prevent vanishing gradients and capture hierarchical image features.  
 By freezing ResNet50’s convolutional layers and training only the top classifier, the model efficiently learns to map general image features to specific dog breeds.
 
+### Evaluation Metrics and Validation Accuracy
+
+To evaluate model performance, we use **accuracy** as the primary metric, since this 
+is a multi-class classification task involving 133 distinct dog breeds.  
+Accuracy measures the proportion of correctly classified images and is appropriate 
+because each image belongs to exactly one class and the dataset is reasonably balanced.
+
+We also track **validation loss** and **validation accuracy** to measure how well the 
+model generalizes to unseen data.  
+While training accuracy evaluates how well the model fits the training data, 
+validation accuracy reflects real-world performance — an essential measure for assessing 
+generalization capability.
+
+#### Initial Issue: Low Validation Accuracy Due to Label Mismatch
+Early experiments showed that validation accuracy remained extremely low (around 1%) 
+even though training accuracy quickly increased. This initially suggested overfitting, 
+but further investigation revealed a **data alignment problem**:  
+the order of dog breed labels (`dog_names`) did not match the class ordering used by 
+the Keras data generator when the bottleneck features were created.
+
+This mismatch meant that the model was learning correctly from the input features but 
+evaluating against misaligned targets — effectively predicting the right breed 
+for the wrong label.  
+
+#### Fix and Impact
+After carefully realigning the label indices between the bottleneck feature files 
+and the directory structure of the training dataset, the validation accuracy 
+improved dramatically — from nearly **1% to over 80%**.  
+This confirmed that the underlying model (ResNet50 + custom classifier) was 
+functioning as intended, and the poor validation scores were purely due to 
+incorrect label mapping rather than model quality.
+
+#### Final Validation Performance
+Using transfer learning from ResNet50 with global average pooling and a dense softmax 
+layer for 133 breeds, the final model achieved:
+- **Training accuracy:** ~99%
+- **Validation accuracy:** ~80%
+- **Validation loss:** stabilized around 0.9  
+
+These results demonstrate both the effectiveness of transfer learning and the 
+importance of ensuring correct data-label alignment when working with precomputed 
+bottleneck features.
+
 ### Training Summary
 - Optimizer: Adam (learning_rate=0.001)  
 - Epochs: 30  
@@ -130,7 +193,18 @@ Error: Neither a human nor a dog was detected in the image.
 
 ---
 
-## 7. Discussion and Future Improvements
+## 7. Project Summary and Reflections
+
+### Project Summary
+
+This project demonstrates how transfer learning with ResNet50 can accurately 
+classify dog breeds from images. By leveraging pre-trained convolutional layers, 
+we achieved over 80% validation accuracy with limited training data. 
+
+The project showcases the power of reusing learned representations from 
+ImageNet models, drastically reducing training time and improving performance 
+on new but related tasks. Future improvements could involve fine-tuning 
+more layers and augmenting the data to further enhance generalization.
 
 ### Observations
 - Transfer learning drastically improved results from 3% → 80%.
@@ -152,3 +226,6 @@ The project successfully:
 - Provides a working, interpretable pipeline for breed identification.
 
 This demonstrates the power of **transfer learning** with **ResNet50** for high-level visual classification tasks.
+
+
+
