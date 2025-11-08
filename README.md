@@ -37,7 +37,7 @@ pip install -r requirements.txt
 | `haarcascades/` | Haar cascade XML files used for human face detection. |
 | `bottleneck_features/` | Pre-computed ResNet50 bottleneck features. |
 | `images/` | Example and test images for predictions. |
-| `report.md` | Detailed project report (model architecture, training results, discussion). |
+| `report.md` | Detailed project blog report (model architecture, training results, discussion). |
 | `README.md` | (This file) Project summary, setup instructions, and acknowledgments. |
 
 ---
